@@ -1,18 +1,8 @@
 # BrainFlow 🧠🌊
 
-Uma plataforma moderna de mapas m### 🎨 Canva### 📤 Exportação ## 🎮 Como Usarfissional
-- **SVG Vetorial**: Escalável infinitamente, compatível Adobe Illustrator
-- **PDF Premium**: Múltiplas páginas, bookmarks, metadados, PDF/A
-- **PNG de Alta Qualidade**: Transparência alpha, resoluções 1x/2x/3x
-- **JPG Otimizado**: Qualidade 60-100%, progressive encoding
-- **Background Jobs**: Processamento assíncrono via Celery + Rediserativo Avançado
-- **Controles Precisos**: **TAB** criar subtópicos, **Enter** editar, setas navegar
-- **Drag & Drop Inteligente**: Auto-posicionamento com algoritmos de colisão
-- **Animações Fluidas**: Movimento "galho de árvore" a 60fps constantes
-- **Zoom Profissional**: 25%-400% com scroll/touchpad, pan infinito
-- **Seleção Avançada**: **Shift+clique** múltiplo, **Ctrl+D** duplicar com foco em simplicidade, performance e exportação profissional.
+Uma plataforma moderna de mapas mentais com foco em simplicidade, performance e exportação profissional## 🛠️ Instalação e Configuração
 
-![BrainFlow Demo](https://via.placeholder.com/800x400/3b82f6/ffffff?text=BrainFlow+Canvas+Demo)
+![BrainFlow Demo](https://via.placeholder.com/800x400/3b82f6/ffffff?te## 📊 Performance e Escalabilidadet=BrainFlow+Canvas+Demo)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg?logo=react)](https://react.dev/)
@@ -51,8 +41,6 @@ python manage.py runserver
 
 Acesse `http://localhost:3000` e comece a criar seus mapas mentais!
 
-## ⭐ Funcionalidades
-
 ## 🚀 Funcionalidades Principais
 
 ### 🔐 Autenticação e Segurança
@@ -61,14 +49,14 @@ Acesse `http://localhost:3000` e comece a criar seus mapas mentais!
 - **Sessões Persistentes**: Login seguro com logout automático
 - **Recuperação de Senha**: Sistema completo via email
 
-### � 2. Criação de Mapas Mentais Criativa e Dinâmica
+### 🎨 Canvas Interativo Avançado
 - **Interface Drag-and-Drop**: Criação intuitiva através de arrastar e soltar
 - **Design Visual Atrativo**: Experiência moderna e envolvente
 - **Conectores Inteligentes**: Diferentes tipos de conexões visuais entre conceitos
 - **Zoom e Navegação**: Navegação fluida em mapas de qualquer complexidade
 - **Personalização Visual**: Cores, formas e estilos customizáveis
 
-### � 3. Sistema de Exportação Profissional
+### 📤 Exportação Profissional
 - **Múltiplos Formatos**: Exportação em SVG, PDF, JPG e PNG
 - **Alta Qualidade**: Resolução otimizada para impressão e apresentação
 - **Configurações Flexíveis**: Ajuste de tamanho, qualidade e formato
@@ -81,7 +69,7 @@ Acesse `http://localhost:3000` e comece a criar seus mapas mentais!
 - **Auto-save Inteligente**: Salvamento a cada 30s com debounce
 - **Docker Ready**: Deploy completo containerizado
 
-## � Experiência do Usuário
+## 🎯 Experiência do Usuário
 
 ### 🚀 Interface Intuitiva e Moderna
 - **Design Limpo**: Layout organizado e fácil navegação
