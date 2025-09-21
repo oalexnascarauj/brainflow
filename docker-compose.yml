@@ -1,0 +1,71 @@
+# BrainFlow Docker Compose - MVP Development Environment
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: brainflow_db
+      POSTGRES_USER: brainflow_user
+      POSTGRES_PASSWORD: brainflow_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Redis for Celery
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # Django Backend
+  backend:
+    build:
+      context: ./brainflow_backend
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./brainflow_backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgresql://brainflow_user:brainflow_pass@db:5432/brainflow_db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  # Celery Worker
+  celery:
+    build:
+      context: ./brainflow_backend
+      dockerfile: Dockerfile
+    command: celery -A brainflow worker --loglevel=info
+    volumes:
+      - ./brainflow_backend:/app
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgresql://brainflow_user:brainflow_pass@db:5432/brainflow_db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  # React Frontend (Development)
+  frontend:
+    build:
+      context: ./brainflow_frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./brainflow_frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+
+volumes:
+  postgres_data:

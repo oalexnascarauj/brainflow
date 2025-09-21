@@ -1,0 +1,316 @@
+/**
+ * BrainFlow Design System - Mind Map Components
+ * Especificações visuais para nós, conectores e canvas
+ * Seguindo requisitos: retângulos bordas arredondadas, conectores sinuosos
+ */
+
+:root {
+  /* === NODE DIMENSIONS === */
+  --node-min-width: 120px;
+  --node-max-width: 280px;
+  --node-min-height: 40px;
+  --node-padding-x: var(--space-4);  /* 16px */
+  --node-padding-y: var(--space-3);  /* 12px */
+  --node-border-radius: var(--radius-lg);  /* 8px - bordas arredondadas */
+  --node-border-width: 2px;
+
+  /* Node central (tópico obrigatório) */
+  --node-central-width: 160px;
+  --node-central-height: 60px;
+  --node-central-padding-x: var(--space-6);
+  --node-central-padding-y: var(--space-4);
+  --node-central-border-radius: var(--radius-xl);  /* 12px */
+
+  /* === CONNECTION DIMENSIONS === */
+  --connection-stroke-width: 2px;
+  --connection-stroke-width-selected: 3px;
+  --connection-curve-factor: 0.4; /* Para conectores sinuosos */
+
+  /* === CANVAS SETTINGS === */
+  --canvas-grid-size: 20px;
+  --canvas-grid-opacity: 0.1;
+  --canvas-zoom-min: 0.25;
+  --canvas-zoom-max: 3.0;
+  --canvas-zoom-step: 0.1;
+
+  /* === INTERACTION STATES === */
+  --node-hover-scale: 1.02;
+  --node-selected-scale: 1.05;
+  --connection-hover-width: 3px;
+}
+
+/* === NODE STYLES === */
+
+/* Nó padrão (retângulo com bordas arredondadas) */
+.mindmap-node {
+  min-width: var(--node-min-width);
+  max-width: var(--node-max-width);
+  min-height: var(--node-min-height);
+  padding: var(--node-padding-y) var(--node-padding-x);
+  
+  background: var(--bg-secondary);
+  border: var(--node-border-width) solid var(--border-primary);
+  border-radius: var(--node-border-radius);
+  box-shadow: var(--shadow-node);
+  
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  color: var(--text-primary);
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Nó central (tópico obrigatório - diferenciado) */
+.mindmap-node-central {
+  min-width: var(--node-central-width);
+  min-height: var(--node-central-height);
+  padding: var(--node-central-padding-y) var(--node-central-padding-x);
+  
+  background: var(--color-node-central);
+  border: var(--node-border-width) solid var(--color-node-central);
+  border-radius: var(--node-central-border-radius);
+  box-shadow: var(--shadow-lg);
+  
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: white;
+}
+
+/* Estados dos nós */
+.mindmap-node:hover {
+  transform: scale(var(--node-hover-scale));
+  box-shadow: var(--shadow-node-hover);
+  border-color: var(--color-node-hover);
+}
+
+.mindmap-node.selected {
+  transform: scale(var(--node-selected-scale));
+  border-color: var(--color-node-selected);
+  box-shadow: var(--shadow-node-selected);
+}
+
+.mindmap-node.editing {
+  border-color: var(--color-node-editing);
+  box-shadow: 0 0 0 2px var(--color-node-editing);
+}
+
+/* Variações por nível hierárquico */
+.mindmap-node.level-1 {
+  border-color: var(--color-node-level1);
+}
+
+.mindmap-node.level-2 {
+  border-color: var(--color-node-level2);
+}
+
+.mindmap-node.level-3 {
+  border-color: var(--color-node-level3);
+}
+
+/* === CONNECTION STYLES === */
+
+/* Conectores sinuosos simétricos (conforme especificação) */
+.mindmap-connection {
+  fill: none;
+  stroke: var(--color-connection-default);
+  stroke-width: var(--connection-stroke-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mindmap-connection:hover {
+  stroke: var(--color-connection-hover);
+  stroke-width: var(--connection-hover-width);
+}
+
+.mindmap-connection.selected {
+  stroke: var(--color-connection-selected);
+  stroke-width: var(--connection-stroke-width-selected);
+}
+
+/* Conectores por nível hierárquico */
+.mindmap-connection.level-1 {
+  stroke: var(--color-node-level1);
+}
+
+.mindmap-connection.level-2 {
+  stroke: var(--color-node-level2);
+}
+
+.mindmap-connection.level-3 {
+  stroke: var(--color-node-level3);
+}
+
+/* === CANVAS STYLES === */
+
+.mindmap-canvas {
+  width: 100%;
+  height: 100%;
+  background: var(--color-canvas-background);
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.mindmap-canvas:active {
+  cursor: grabbing;
+}
+
+/* Grid pattern opcional */
+.mindmap-canvas.with-grid {
+  background-image: 
+    linear-gradient(var(--color-canvas-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-canvas-grid) 1px, transparent 1px);
+  background-size: var(--canvas-grid-size) var(--canvas-grid-size);
+  background-position: 0 0, 0 0;
+}
+
+/* === SELECTION INDICATORS === */
+
+.selection-box {
+  position: absolute;
+  border: 2px dashed var(--color-node-selected);
+  background: rgba(245, 158, 11, 0.1);
+  pointer-events: none;
+  border-radius: var(--radius-md);
+}
+
+.resize-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--color-node-selected);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.resize-handle.top-left { top: -4px; left: -4px; cursor: nw-resize; }
+.resize-handle.top-right { top: -4px; right: -4px; cursor: ne-resize; }
+.resize-handle.bottom-left { bottom: -4px; left: -4px; cursor: sw-resize; }
+.resize-handle.bottom-right { bottom: -4px; right: -4px; cursor: se-resize; }
+
+/* === DRAG & DROP STYLES === */
+
+.node-dragging {
+  opacity: 0.7;
+  transform: rotate(2deg);
+  z-index: 1000;
+}
+
+.drop-zone {
+  border: 2px dashed var(--color-primary-500);
+  border-radius: var(--node-border-radius);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.drop-zone.valid {
+  border-color: var(--color-success-500);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.drop-zone.invalid {
+  border-color: var(--color-error-500);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* === MINIMAP STYLES === */
+
+.minimap {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  width: 200px;
+  height: 120px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.minimap-canvas {
+  width: 100%;
+  height: 100%;
+  background: var(--color-canvas-background);
+}
+
+.minimap-viewport {
+  border: 2px solid var(--color-primary-500);
+  background: rgba(59, 130, 246, 0.1);
+  cursor: move;
+}
+
+/* === ZOOM CONTROLS === */
+
+.zoom-controls {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-2);
+}
+
+.zoom-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.zoom-button:hover {
+  background: var(--color-secondary-100);
+  color: var(--text-primary);
+}
+
+.zoom-level {
+  font-size: var(--font-size-xs);
+  text-align: center;
+  color: var(--text-muted);
+  margin: var(--space-1) 0;
+}
+
+/* === RESPONSIVE ADAPTATIONS === */
+
+@media (max-width: 768px) {
+  :root {
+    --node-min-width: 100px;
+    --node-max-width: 220px;
+    --node-padding-x: var(--space-3);
+    --node-padding-y: var(--space-2);
+    --node-central-width: 140px;
+    --node-central-height: 50px;
+  }
+  
+  .minimap {
+    width: 160px;
+    height: 96px;
+  }
+  
+  .zoom-controls {
+    scale: 0.9;
+  }
+}
